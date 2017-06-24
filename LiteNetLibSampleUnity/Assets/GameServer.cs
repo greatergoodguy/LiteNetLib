@@ -31,10 +31,18 @@ public class GameServer : MonoBehaviour, INetEventListener
     void Update()
     {
         _netServer.PollEvents();
+		if (Input.GetKeyDown(KeyCode.Space)) {
+			_dataWriter.Reset();
+			_dataWriter.Put(true);
+			foreach (NetPeer peer in netPeers) {
+				peer.Send(_dataWriter, SendOptions.Sequenced);
+			}
+		}
     }
 
     void FixedUpdate()
     {
+		/*
         if (_ourPeer != null)
         {
 			_angle += RotateSpeed * Time.deltaTime;
@@ -52,6 +60,7 @@ public class GameServer : MonoBehaviour, INetEventListener
 //            _dataWriter.Put(_serverBall.transform.position.x);
 //            _ourPeer.Send(_dataWriter, SendOptions.Sequenced);
         }
+        */
     }
 
     void OnDestroy()

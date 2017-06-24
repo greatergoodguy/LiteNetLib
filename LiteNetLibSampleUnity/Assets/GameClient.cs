@@ -27,13 +27,13 @@ public class GameClient : MonoBehaviour, INetEventListener
         var peer = _netClient.GetFirstPeer();
         if (peer != null && peer.ConnectionState == ConnectionState.Connected)
         {
-            //Fixed delta set to 0.05
-            var pos = _clientBallInterpolated.transform.position;
-            pos.x = Mathf.Lerp(_oldBallPosX, _newBallPosX, _lerpTime);
-            _clientBallInterpolated.transform.position = pos;
-
-            //Basic lerp
-            _lerpTime += Time.deltaTime/Time.fixedDeltaTime;
+//            //Fixed delta set to 0.05
+//            var pos = _clientBallInterpolated.transform.position;
+//            pos.x = Mathf.Lerp(_oldBallPosX, _newBallPosX, _lerpTime);
+//            _clientBallInterpolated.transform.position = pos;
+//
+//            //Basic lerp
+//            _lerpTime += Time.deltaTime/Time.fixedDeltaTime;
         }
         else
         {
@@ -59,16 +59,19 @@ public class GameClient : MonoBehaviour, INetEventListener
 
     public void OnNetworkReceive(NetPeer peer, NetDataReader reader)
     {
-        _newBallPosX = reader.GetFloat();
+		var data = reader.GetBool();
+		Debug.Log("OnNetworkReceive - data: " + data);
 
-        var pos = _clientBall.transform.position;
-
-        _oldBallPosX = pos.x;
-        pos.x = _newBallPosX;
-
-        _clientBall.transform.position = pos;
-
-        _lerpTime = 0f;
+//        _newBallPosX = reader.GetFloat();
+//
+//        var pos = _clientBall.transform.position;
+//
+//        _oldBallPosX = pos.x;
+//        pos.x = _newBallPosX;
+//
+//        _clientBall.transform.position = pos;
+//
+//        _lerpTime = 0f;
     }
 
     public void OnNetworkReceiveUnconnected(NetEndPoint remoteEndPoint, NetDataReader reader, UnconnectedMessageType messageType)
