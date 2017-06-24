@@ -1,6 +1,7 @@
 using UnityEngine;
 using LiteNetLib;
 using LiteNetLib.Utils;
+using System.Collections.Generic;
 
 public class GameServer : MonoBehaviour, INetEventListener
 {
@@ -15,6 +16,8 @@ public class GameServer : MonoBehaviour, INetEventListener
     private NetDataWriter _dataWriter;
 
     [SerializeField] private GameObject _serverBall;
+
+	HashSet<NetPeer> netPeers = new HashSet<NetPeer>();
 
     void Start()
     {
@@ -39,7 +42,10 @@ public class GameServer : MonoBehaviour, INetEventListener
 			_serverBall.transform.position = _centre + offset;
             _dataWriter.Reset();
             _dataWriter.Put(_serverBall.transform.position.x);
-            _ourPeer.Send(_dataWriter, SendOptions.Sequenced);
+			foreach (NetPeer peer in netPeers) {
+				peer.Send(_dataWriter, SendOptions.Sequenced);
+			}
+
 
 //            _serverBall.transform.Translate(1f * Time.fixedDeltaTime, 0f, 0f);
 //            _dataWriter.Reset();
@@ -58,11 +64,12 @@ public class GameServer : MonoBehaviour, INetEventListener
     {
         Debug.Log("[SERVER] We have new peer " + peer.EndPoint);
         _ourPeer = peer;
+		netPeers.Add(peer);
     }
 
     public void OnPeerDisconnected(NetPeer peer, DisconnectReason reason, int socketErrorCode)
     {
- 
+		netPeers.Remove(peer);
     }
 
     public void OnNetworkError(NetEndPoint endPoint, int socketErrorCode)
@@ -89,6 +96,8 @@ public class GameServer : MonoBehaviour, INetEventListener
         Debug.Log("[SERVER] peer disconnected " + peer.EndPoint + ", info: " + disconnectInfo.Reason);
         if (peer == _ourPeer)
             _ourPeer = null;
+
+		netPeers.Remove(peer);
     }
 
     public void OnNetworkReceive(NetPeer peer, NetDataReader reader)
