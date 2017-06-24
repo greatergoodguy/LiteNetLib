@@ -61,6 +61,7 @@ public class GameClient : MonoBehaviour, INetEventListener
     {
 		var data = reader.GetBool();
 		Debug.Log("OnNetworkReceive - data: " + data);
+		ActorAudioManager.I.Play(0);
 
 //        _newBallPosX = reader.GetFloat();
 //
