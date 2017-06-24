@@ -4,6 +4,12 @@ using LiteNetLib.Utils;
 
 public class GameServer : MonoBehaviour, INetEventListener
 {
+	private float RotateSpeed = 1f;
+	private float Radius = 1.0f;
+
+	private Vector2 _centre;
+	private float _angle;
+
     private NetManager _netServer;
     private NetPeer _ourPeer;
     private NetDataWriter _dataWriter;
@@ -28,10 +34,17 @@ public class GameServer : MonoBehaviour, INetEventListener
     {
         if (_ourPeer != null)
         {
-            _serverBall.transform.Translate(1f * Time.fixedDeltaTime, 0f, 0f);
+			_angle += RotateSpeed * Time.deltaTime;
+			var offset = new Vector2(Mathf.Sin(_angle), Mathf.Cos(_angle)) * Radius;
+			_serverBall.transform.position = _centre + offset;
             _dataWriter.Reset();
             _dataWriter.Put(_serverBall.transform.position.x);
             _ourPeer.Send(_dataWriter, SendOptions.Sequenced);
+
+//            _serverBall.transform.Translate(1f * Time.fixedDeltaTime, 0f, 0f);
+//            _dataWriter.Reset();
+//            _dataWriter.Put(_serverBall.transform.position.x);
+//            _ourPeer.Send(_dataWriter, SendOptions.Sequenced);
         }
     }
 
