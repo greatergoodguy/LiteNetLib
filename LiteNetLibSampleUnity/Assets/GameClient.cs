@@ -18,7 +18,7 @@ public class GameClient : MonoBehaviour, INetEventListener
         _netClient = new NetManager(this, "sample_app");
 	    _netClient.Start();
 		_netClient.NatPunchEnabled = true;
-	    _netClient.UpdateTime = 1;
+	    _netClient.UpdateTime = 100;
     }
 
 	void Update ()

@@ -26,7 +26,7 @@ public class GameServer : MonoBehaviour, INetEventListener
         _netServer.Start(5000);
         _netServer.DiscoveryEnabled = true;
 		_netServer.NatPunchEnabled = true;
-        _netServer.UpdateTime = 1;
+        _netServer.UpdateTime = 100;
     }
 
     void Update()
