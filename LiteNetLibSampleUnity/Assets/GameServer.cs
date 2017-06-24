@@ -33,8 +33,8 @@ public class GameServer : MonoBehaviour, INetEventListener
     {
         _netServer.PollEvents();
 		if (Input.GetKeyDown(KeyCode.Space)) {
-			SendChimeToClients();
-			//Invoke("SendChimeToClients", 1);
+			//SendChimeToClients();
+			Invoke("SendChimeToClients", 1);
 		}
     }
 
