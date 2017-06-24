@@ -33,13 +33,18 @@ public class GameServer : MonoBehaviour, INetEventListener
     {
         _netServer.PollEvents();
 		if (Input.GetKeyDown(KeyCode.Space)) {
-			_dataWriter.Reset();
-			_dataWriter.Put(true);
-			foreach (NetPeer peer in netPeers) {
-				peer.Send(_dataWriter, SendOptions.Unreliable);
-			}
+			Invoke("SendChimeToClients", 1);
 		}
     }
+
+	void SendChimeToClients()
+	{
+		_dataWriter.Reset();
+		_dataWriter.Put(true);
+		foreach (NetPeer peer in netPeers) {
+			peer.Send(_dataWriter, SendOptions.Unreliable);
+		}
+	}
 
     void FixedUpdate()
     {
