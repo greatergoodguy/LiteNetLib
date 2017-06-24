@@ -35,7 +35,7 @@ public class GameServer : MonoBehaviour, INetEventListener
 			_dataWriter.Reset();
 			_dataWriter.Put(true);
 			foreach (NetPeer peer in netPeers) {
-				peer.Send(_dataWriter, SendOptions.Sequenced);
+				peer.Send(_dataWriter, SendOptions.Unreliable);
 			}
 		}
     }
